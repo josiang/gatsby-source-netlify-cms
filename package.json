@@ -13,7 +13,8 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "type-check": "tsc --noEmit",
     "build": "tsc",
-    "prepare": "yarn build"
+    "prepare": "yarn build",
+    "postinstall": "yarn build"
   },
   "dependencies": {
     "@analytics/google-analytics": "0.5.3",
