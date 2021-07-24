@@ -1,8 +1,8 @@
 node_modules/
 
-# types.js
-# types.d.ts
-# gatsby-node.js
-# gatsby-node.d.ts
-# helpers.js
-# helpers.d.ts
+types.js
+types.d.ts
+gatsby-node.js
+gatsby-node.d.ts
+helpers.js
+helpers.d.ts

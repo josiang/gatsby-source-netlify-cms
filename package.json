@@ -1,12 +1,8 @@
 {
-  "name": "gatsby-source-netlify-cms",
-  "version": "1.0.0",
-  "private": true,
-  "description": "",
+  "name": "@hey_joz/gatsby-source-netlify-cms",
+  "version": "0.0.1",
   "author": "Josian Godard",
-  "keywords": [
-    "gatsby"
-  ],
+  "license": "MIT",
   "main": "gatsby-config.js",
   "scripts": {
     "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx --fix",
@@ -16,10 +12,8 @@
     "prepare": "yarn build"
   },
   "dependencies": {
-    "gatsby-source-filesystem": "3.10.0",
     "gray-matter": "4.0.3",
     "jsonpath-plus": "6.0.1",
-    "netlify-cms-core": "2.45.0",
     "remark": "13.0.0",
     "remark-breaks": "2.0.2",
     "remark-gfm": "1.0.0",
@@ -32,9 +26,11 @@
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-simple-import-sort": "7.0.0",
     "gatsby": "3.10.1",
+    "gatsby-source-filesystem": "3.10.0",
+    "netlify-cms-core": "2.45.0",
     "typescript": "4.3.5"
   },
   "peerDependencies": {
-    "gatsby": "3.10.1"
+    "gatsby": "^3.0.0"
   }
 }
