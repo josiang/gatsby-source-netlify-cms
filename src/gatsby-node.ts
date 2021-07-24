@@ -173,7 +173,7 @@ export const createPages: GatsbyNode["createPages"] = async (
   data?.allFile.nodes.forEach((file) => {
     const child = file.children?.[0];
     const type = child.__typename;
-    const component = path.join(__dirname, `src/templates/${type}/index.tsx`);
+    const component = path.resolve(`./src/templates/${type}/index.tsx`);
 
     if (fs.existsSync(component)) {
       const pageId = child.id;

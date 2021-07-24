@@ -20,7 +20,9 @@
     "strictPropertyInitialization": true,
     "resolveJsonModule": true,
     "target": "es5",
-    "outDir": "./"
+    "outDir": "./",
+    "declaration": true
   },
-  "exclude": ["__generated__"]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

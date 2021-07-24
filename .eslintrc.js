@@ -6,7 +6,7 @@ module.exports = {
     {
       files: ["**/*.ts", "**/*.tsx"],
       parser: "@typescript-eslint/parser",
-      plugins: ["@typescript-eslint", "simple-import-sort", "jsx-a11y"],
+      plugins: ["@typescript-eslint", "simple-import-sort"],
       extends: [
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
