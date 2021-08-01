@@ -13,6 +13,7 @@ import remark from "remark";
 import breaks from "remark-breaks";
 import gfm from "remark-gfm";
 import html from "remark-html";
+import slugify from "slugify";
 
 import type {
   CmsCollectionField,
@@ -28,6 +29,30 @@ export const toArray = <T>(value: T | T[]): T[] =>
 
 export const capitalizeFirstLetter = (string: string): string => {
   return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+export const getParentPath = (
+  allNodes: Node[],
+  parentId: string | undefined
+): string[] => {
+  const pathParts: string[] = [];
+
+  if (!parentId) {
+    return pathParts;
+  }
+
+  const page: Node | undefined = allNodes.find(
+    (node: Node) => node.id === parentId
+  );
+
+  if (page) {
+    if (page.parentPage) {
+      pathParts.push(...getParentPath(allNodes, page.parentPage as string));
+    }
+    pathParts.push(page.path as string);
+  }
+
+  return pathParts;
 };
 
 export const getGraphType = (field: CmsCollectionField) => {
@@ -82,6 +107,26 @@ export const getGraphResolver = (
   switch (field.widget) {
     default: {
       return undefined;
+    }
+
+    /**
+     * "path" uses the sibling property "parentPage" to handle nested pages
+     */
+    case "path": {
+      return (source, _, context) => {
+        const allNodes: Node[] = context.nodeModel.getAllNodes();
+        const parentPath: string[] = getParentPath(
+          allNodes,
+          (source?.parentPage as string) || undefined
+        );
+
+        const path = `/${parentPath
+          .concat(source[field.name])
+          .map((part) => slugify(part, { lower: true }))
+          .join("/")}`;
+
+        return path;
+      };
     }
 
     case "markdown": {
