@@ -1,6 +1,27 @@
 import type { PluginOptions as OrigPluginOptions } from "gatsby";
 import { CmsCollection, InitOptions } from "netlify-cms-core";
 
+export type PluginOptions = OrigPluginOptions & {
+  initOptions: InitOptions;
+  pageCollectionNames: string[];
+};
+
+export type AllPagesQuery = {
+  readonly allFile: {
+    readonly nodes: ReadonlyArray<{
+      readonly children: ReadonlyArray<{
+        readonly __typename: string;
+        readonly id: string;
+        readonly path: string;
+      }>;
+    }>;
+  };
+};
+
+export type AllPagesQueryVariables = {
+  collections: ReadonlyArray<string>;
+};
+
 export type CmsCollectionFile = Exclude<
   CmsCollection["files"],
   undefined
@@ -40,5 +61,3 @@ export type CmsCollectionFieldSelect = Extract<
   CmsCollectionField,
   { widget: "select" }
 >;
-
-export type PluginOptions = OrigPluginOptions & { initOptions: InitOptions };

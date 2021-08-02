@@ -1,6 +1,6 @@
 {
   "name": "@hey_joz/gatsby-source-netlify-cms",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "Josian Godard",
   "license": "MIT",
   "main": "gatsby-config.js",
@@ -12,6 +12,7 @@
     "prepare": "yarn build"
   },
   "dependencies": {
+    "gray-matter": "4.0.3",
     "jsonpath-plus": "6.0.1",
     "remark": "13.0.0",
     "remark-breaks": "2.0.2",
