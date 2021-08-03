@@ -17,28 +17,35 @@ module.exports = ({ initOptions }) => {
     });
   }
 
-  initOptions?.config?.collections?.forEach((collection) => {
-    if (collection?.name && collection.folder) {
-      fileSystemPlugins.push({
-        resolve: "gatsby-source-filesystem",
-        options: {
-          name: collection.name,
-          path: collection.folder,
-        },
-      });
-    }
+  if (initOptions.config.collections) {
+    initOptions.config.collections.forEach((collection) => {
+      if (collection && collection.name) {
+        // Folder collection
+        if (collection.folder) {
+          fileSystemPlugins.push({
+            resolve: "gatsby-source-filesystem",
+            options: {
+              name: collection.name,
+              path: collection.folder,
+            },
+          });
+        }
 
-    if (collection?.name && collection.files) {
-      const files = collection.files.map((file) => file.file);
-      fileSystemPlugins.push({
-        resolve: "gatsby-source-filesystem",
-        options: {
-          name: collection.name,
-          path: getCommonFilePath(files),
-        },
-      });
-    }
-  });
+        // Files collection
+        if (collection.files) {
+          const files = collection.files.map((file) => file.file);
+
+          fileSystemPlugins.push({
+            resolve: "gatsby-source-filesystem",
+            options: {
+              name: collection.name,
+              path: getCommonFilePath(files),
+            },
+          });
+        }
+      }
+    });
+  }
 
   return {
     plugins: [...fileSystemPlugins],
