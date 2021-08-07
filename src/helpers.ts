@@ -10,7 +10,7 @@ import { JSONPath } from "jsonpath-plus";
 import intersection from "lodash/intersection";
 import type { InitOptions } from "netlify-cms-core";
 import path from "path";
-import remark from "remark";
+import { remark } from "remark";
 import breaks from "remark-breaks";
 import gfm from "remark-gfm";
 import html from "remark-html";
@@ -136,7 +136,8 @@ export const getGraphResolver = (
           .use(html)
           .use(breaks)
           .use(gfm)
-          .processSync(source[field.name]).contents;
+          .processSync(source[field.name])
+          .value.toString();
       };
     }
 
