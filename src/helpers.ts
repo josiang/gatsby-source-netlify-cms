@@ -7,10 +7,9 @@ import type {
 } from "gatsby";
 import type { FileSystemNode } from "gatsby-source-filesystem";
 import { JSONPath } from "jsonpath-plus";
-import intersection from "lodash/intersection";
 import type { InitOptions } from "netlify-cms-core";
 import path from "path";
-import { remark } from "remark";
+import remark from "remark";
 import breaks from "remark-breaks";
 import gfm from "remark-gfm";
 import html from "remark-html";
@@ -137,7 +136,7 @@ export const getGraphResolver = (
           .use(breaks)
           .use(gfm)
           .processSync(source[field.name])
-          .value.toString();
+          .contents.toString();
       };
     }
 
@@ -589,14 +588,4 @@ export const parseCmsFields = ({
   });
 
   return typeDefs;
-};
-
-export const getCommonFilePath = (filePaths: string[]): string => {
-  const filePathsParts: string[][] = [];
-
-  filePaths.forEach((filePath) => {
-    filePathsParts.push(filePath.split("/"));
-  });
-
-  return intersection(...filePathsParts).join("/");
 };
