@@ -11,7 +11,8 @@ import type { FileSystemNode } from "gatsby-source-filesystem";
 import grayMatter from "gray-matter";
 import path from "path";
 
-import { capitalizeFirstLetter, parseCmsFields } from "./helpers";
+import { capitalizeFirstLetter } from "./helpers";
+import { parseCmsFields } from "./lib";
 import type {
   AllPagesQuery,
   AllPagesQueryVariables,

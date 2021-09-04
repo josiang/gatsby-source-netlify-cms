@@ -3,7 +3,11 @@ node_modules/
 
 types.js
 types.d.ts
+gatsby-config.js
+gatsby-config.d.ts
 gatsby-node.js
 gatsby-node.d.ts
 helpers.js
 helpers.d.ts
+lib.js
+lib.d.ts
