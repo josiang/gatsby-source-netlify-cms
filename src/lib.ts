@@ -93,7 +93,7 @@ export const getGraphResolver = (
   field: CmsCollectionField,
   initOptions: InitOptions,
   relation?: "one" | "many" | undefined
-): ((source: any, args: any, context: any) => any) | undefined => {
+): ((source: any, args: any, context: any) => Promise<any>) | undefined => {
   switch (field.widget) {
     default: {
       return undefined;
@@ -104,8 +104,7 @@ export const getGraphResolver = (
      */
     case "path": {
       return async (source, _, context) => {
-        const { entries } = await context.nodeModel.findAll();
-
+        const { entries } = await context.nodeModel.findAll({ type: "Node" });
         const allNodes: Node[] = Array.from(entries);
 
         const parentPath: string[] = getParentPath(
@@ -123,13 +122,13 @@ export const getGraphResolver = (
     }
 
     case "markdown": {
-      return (source) => {
+      return async (source) => {
         return parseMarkdown(source[field.name]);
       };
     }
 
     case "number": {
-      return (source) => {
+      return async (source) => {
         const value = source[field.name];
         return Number(value);
       };
@@ -147,11 +146,9 @@ export const getGraphResolver = (
         const base = path.basename(filePath);
 
         const { entries } = await context.nodeModel.findAll({ type: "File" });
+        const allNodes: FileSystemNode[] = Array.from(entries);
 
-        return (
-          entries.filter((file: FileSystemNode) => file.base === base)[0] ||
-          null
-        );
+        return allNodes.find((file) => file.base === base) || null;
       };
     }
 
@@ -186,14 +183,15 @@ export const getGraphResolver = (
             const { entries } = await context.nodeModel.findAll({
               type: "File",
             });
+            const allNodes: FileSystemNode[] = Array.from(entries);
 
             const fileSystemNode =
-              entries.filter((fileSystemNode: FileSystemNode) => {
-                return fileConfig?.file
+              allNodes.find((fileSystemNode) =>
+                fileConfig?.file
                   ? fileSystemNode?.absolutePath?.match(fileConfig.file) ||
-                      false
-                  : false;
-              })[0] || null;
+                    false
+                  : false
+              ) || null;
 
             const targetNodeId: string | null =
               fileSystemNode?.children?.[0] || null;
@@ -215,20 +213,21 @@ export const getGraphResolver = (
         // The collection has fields
         else if (collectionConfig?.fields) {
           const { entries } = await context.nodeModel.findAll({ type: "File" });
+          const allNodes: FileSystemNode[] = Array.from(entries);
 
           // Find file nodes from file path
-          entries
-            .filter((fileSystemNode: FileSystemNode) =>
+          allNodes
+            .filter((fileSystemNode) =>
               collectionConfig.folder
                 ? fileSystemNode?.absolutePath?.match(
                     collectionConfig.folder
                   ) || false
                 : false
             )
-            .map((fileSystemNode: FileSystemNode) => {
+            .map((fileSystemNode) => {
               return fileSystemNode?.children?.[0] || null;
             })
-            .forEach((targetNodeId: string) => {
+            .forEach((targetNodeId) => {
               const targetNode: Node | null = targetNodeId
                 ? context.nodeModel.getNodeById({ id: targetNodeId }) || null
                 : null;
