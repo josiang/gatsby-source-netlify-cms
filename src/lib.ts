@@ -179,7 +179,7 @@ export const getGraphResolver = (
             : collectionConfig.files;
 
           // Find file nodes from file path
-          fileConfigs.forEach(async (fileConfig) => {
+          for (const fileConfig of fileConfigs) {
             const { entries } = await context.nodeModel.findAll({
               type: "File",
             });
@@ -208,7 +208,7 @@ export const getGraphResolver = (
             });
 
             allResults = allResults.concat(...subResults);
-          });
+          }
         }
         // The collection has fields
         else if (collectionConfig?.fields) {
