@@ -1,9 +1,9 @@
 {
   "name": "@hey_joz/gatsby-source-netlify-cms",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "author": "Josian Godard",
   "license": "MIT",
-  "main": "gatsby-config.js",
+  "main": "index.js",
   "scripts": {
     "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
