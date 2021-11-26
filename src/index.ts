@@ -1,5 +1,6 @@
 export { capitalizeFirstLetter, parseMarkdown } from "./helpers";
 export type {
+  CmsCollection,
   CmsCollectionField,
   CmsCollectionFieldBoolean,
   CmsCollectionFieldCode,
@@ -16,5 +17,10 @@ export type {
   CmsCollectionFieldRelation,
   CmsCollectionFieldSelect,
   CmsCollectionFieldStringOrText,
+  CmsCollectionFile,
+  CmsField,
+  CmsWidgetControlProps,
+  InitOptions,
   PluginOptions,
+  PreviewTemplateComponentProps,
 } from "./types";

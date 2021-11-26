@@ -1,6 +1,6 @@
 {
   "name": "@hey_joz/gatsby-source-netlify-cms",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "author": "Josian Godard",
   "license": "MIT",
   "main": "index.js",
