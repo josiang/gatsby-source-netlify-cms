@@ -9,5 +9,7 @@ gatsby-node.js
 gatsby-node.d.ts
 helpers.js
 helpers.d.ts
+index.js
+index.d.ts
 lib.js
 lib.d.ts
