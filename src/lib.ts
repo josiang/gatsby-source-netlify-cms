@@ -11,7 +11,12 @@ import type { InitOptions } from "netlify-cms-core";
 import path from "path";
 import slugify from "slugify";
 
-import { capitalizeFirstLetter, parseMarkdown, toArray } from "./helpers";
+import {
+  capitalizeFirstLetter,
+  enhanceMarkdown,
+  parseMarkdown,
+  toArray,
+} from "./helpers";
 import type {
   CmsCollectionField,
   CmsCollectionFieldList,
@@ -122,8 +127,40 @@ export const getGraphResolver = (
     }
 
     case "markdown": {
-      return async (source) => {
-        return parseMarkdown(source[field.name]);
+      return async (source, _, context) => {
+        const { entries } = await context.nodeModel.findAll({ type: "File" });
+        const allFileNodes: FileSystemNode[] = Array.from(entries);
+        const fileNodes: FileSystemNode[] = [];
+
+        const markdown: string = source[field.name];
+
+        const enhancedMarkdown = enhanceMarkdown<FileSystemNode>(
+          markdown,
+          (file) => {
+            const base = path.basename(file);
+
+            const fileNode =
+              // Try to find an Image file node
+              allFileNodes.find((file) => file.base === base) ||
+              // Try to find an generated page file node
+              allFileNodes.find((file) => file.children.includes(base)) ||
+              null;
+
+            if (fileNode) {
+              fileNodes.push(fileNode);
+            }
+
+            return fileNode;
+          },
+          (file) => {
+            return file.id;
+          }
+        );
+
+        return {
+          html: parseMarkdown(enhancedMarkdown),
+          files: fileNodes,
+        };
       };
     }
 
@@ -313,7 +350,6 @@ export const parseCmsFields = ({
       case "file":
       case "hidden":
       case "image":
-      case "markdown":
       case "number":
       case "string":
       case "text":
@@ -326,6 +362,43 @@ export const parseCmsFields = ({
             ...parentTypeDef.config.fields,
             [field.name]: {
               type: getGraphType(field),
+              resolve: getGraphResolver(field, initOptions),
+              extensions: getGraphExtentions(field),
+            },
+          };
+        }
+
+        break;
+      }
+
+      case "markdown": {
+        const typeName = `${parentTypeName}${capitalizeFirstLetter(
+          field.name
+        )}`;
+
+        const typeDef: GatsbyGraphQLObjectType = {
+          kind: "OBJECT",
+          config: {
+            name: typeName,
+            fields: {
+              html: {
+                type: "String",
+              },
+              files: {
+                type: "[File]",
+              },
+            },
+          },
+        };
+
+        typeDefs = typeDefs.concat(typeDef);
+
+        if (parentTypeDef) {
+          // register field in the parent object type
+          parentTypeDef.config.fields = {
+            ...parentTypeDef.config.fields,
+            [field.name]: {
+              type: typeName,
               resolve: getGraphResolver(field, initOptions),
               extensions: getGraphExtentions(field),
             },

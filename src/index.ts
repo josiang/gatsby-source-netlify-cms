@@ -1,4 +1,8 @@
-export { capitalizeFirstLetter, parseMarkdown } from "./helpers";
+export {
+  capitalizeFirstLetter,
+  enhanceMarkdown,
+  parseMarkdown,
+} from "./helpers";
 export type {
   CmsCollection,
   CmsCollectionField,
