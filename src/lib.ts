@@ -132,33 +132,37 @@ export const getGraphResolver = (
         const allFileNodes: FileSystemNode[] = Array.from(entries);
         const fileNodes: FileSystemNode[] = [];
 
-        const markdown: string = source[field.name];
+        const markdown: string | null | undefined = source[field.name];
 
-        const enhancedMarkdown = enhanceMarkdown<FileSystemNode>(
-          markdown,
-          (file) => {
-            const base = path.basename(file);
+        const enhancedMarkdown: string | null =
+          markdown !== null && markdown !== undefined
+            ? enhanceMarkdown<FileSystemNode>(
+                markdown,
+                (file) => {
+                  const base = path.basename(file);
 
-            const fileNode =
-              // Try to find an Image file node
-              allFileNodes.find((file) => file.base === base) ||
-              // Try to find an generated page file node
-              allFileNodes.find((file) => file.children.includes(base)) ||
-              null;
+                  const fileNode =
+                    // Try to find an Image file node
+                    allFileNodes.find((file) => file.base === base) ||
+                    // Try to find an generated page file node
+                    allFileNodes.find((file) => file.children.includes(base)) ||
+                    null;
 
-            if (fileNode) {
-              fileNodes.push(fileNode);
-            }
+                  if (fileNode) {
+                    fileNodes.push(fileNode);
+                  }
 
-            return fileNode;
-          },
-          (file) => {
-            return file.id;
-          }
-        );
+                  return fileNode;
+                },
+                (file) => {
+                  return file.id;
+                }
+              )
+            : null;
 
         return {
-          html: parseMarkdown(enhancedMarkdown),
+          html:
+            enhancedMarkdown !== null ? parseMarkdown(enhancedMarkdown) : null,
           files: fileNodes,
         };
       };
