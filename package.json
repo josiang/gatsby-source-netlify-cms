@@ -9,7 +9,8 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "type-check": "tsc --noEmit",
     "build": "tsc",
-    "prepare": "yarn build"
+    "prepare": "yarn build",
+    "build:pack": "yarn build && yarn pack"
   },
   "dependencies": {
     "gatsby-source-filesystem": "4.22.0",
